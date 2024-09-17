@@ -1,31 +1,84 @@
-﻿int enemyHP =100;
-int protaganistHP = 100;
+﻿using System.Security.Cryptography;
 
+int enemyHP;
+int protaganistHP;
+string champName = "";
 
-while (enemyHP > 0 && protaganistHP > 0){
-    int eDmg =Random.Shared.Next(1,20);
-    int pDmg =Random.Shared.Next(1,20);
-    enemyHP -= pDmg;
-    protaganistHP -= eDmg;
-
-    Console.ForegroundColor = ConsoleColor.Blue;
-    Console.WriteLine("Blue hit Red and did " +pDmg + " damage\n");
-    Console.ForegroundColor = ConsoleColor.Red;
-    Console.WriteLine("Red now has "+enemyHP+"HP");
-    for(int i = 0; i < 3; i++){
-        Console.WriteLine("");
-    }
-    Console.ForegroundColor = ConsoleColor.Red;
-    Console.WriteLine("Red hit Blue and did " +eDmg + " damage\n");
-    Console.ForegroundColor = ConsoleColor.Blue;
-    Console.WriteLine("Blue now has "+protaganistHP+"HP\n\n\n");
-    Console.ReadLine();
-    Console.Clear();
+Console.ForegroundColor = ConsoleColor.Yellow;
+while(champName.Length <2 || champName.Length >8){
+Console.WriteLine("Write a name for your champion, bettwen 2 & 8 caracters");
+Console.ForegroundColor = ConsoleColor.DarkYellow;
+ champName = Console.ReadLine();
 }
+string[] opponentName = ["Bob", champName + " Killer", "The Flash", "Dare Devil"];
+Console.WriteLine("Your oppenet in Red is named" opponentName[Random.Shared.Next(opponentName.Length)]);
+Console.WriteLine("Your Champion is Blue. Press Enter to continue\n");
+Console.ReadLine();
 
-if(protaganistHP <=0 && enemyHP<=0){
-    Console.ForegroundColor = ConsoleColor.DarkMagenta;
-    Console.WriteLine("""
+for (int i = 0; i < 9; i++)
+{
+    enemyHP = 100;
+    protaganistHP = 100;
+    while (enemyHP > 0 && protaganistHP > 0)
+    {
+        int eHit = Random.Shared.Next(0, 10);
+        int pHit = Random.Shared.Next(0, 10);
+
+
+                        //Red Attack
+        Console.ForegroundColor = ConsoleColor.Red;
+        if (eHit > 4)
+        {
+            int eDmg = Random.Shared.Next(1, 20);
+            protaganistHP -= eDmg;
+            Console.WriteLine($"Red hit {champName} and did {eDmg} damage\n");
+            Console.ForegroundColor = ConsoleColor.Blue;
+            Console.WriteLine($"{champName} now has  {protaganistHP}HP");
+        }
+        else
+        {
+            Console.WriteLine($"Red tried to hit {champName} but missed\n");
+            Console.ForegroundColor = ConsoleColor.Blue;
+            Console.WriteLine($"{champName} still has {protaganistHP}HP");
+        }
+                    //split
+        Console.ForegroundColor = ConsoleColor.Magenta;
+        Console.WriteLine("""
+
+#######################################
+
+""");
+
+                            //Blue attack
+        Console.ForegroundColor = ConsoleColor.Blue;
+        if (pHit > 4)
+        {
+            int pDmg = Random.Shared.Next(1, 20);
+            enemyHP -= pDmg;
+            Console.WriteLine($"{champName} hit Red and did {pDmg} damage\n");
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("Red now has " + enemyHP + "HP");
+        }
+        else
+        {
+            Console.WriteLine($"{champName} tried to hit Red but missed\n");
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("Red still has " + enemyHP + "HP\n\n\n");
+        }
+
+
+
+        Console.ReadLine();
+        Console.Clear();
+    }
+    textResult();
+}
+void textResult()
+{
+    if (protaganistHP <= 0 && enemyHP <= 0)
+    {
+        Console.ForegroundColor = ConsoleColor.DarkMagenta;
+        Console.WriteLine("""
 
 
 
@@ -43,10 +96,11 @@ if(protaganistHP <=0 && enemyHP<=0){
                                                                                                          
 
 """);
-}
-else if (enemyHP<=0){
-    Console.ForegroundColor = ConsoleColor.Blue;
-    Console.WriteLine("""
+    }
+    else if (enemyHP <= 0)
+    {
+        Console.ForegroundColor = ConsoleColor.Blue;
+        Console.WriteLine("""
 
 
 
@@ -63,10 +117,11 @@ else if (enemyHP<=0){
     \_______\/ \_____\/ \_____\/ \_____\/     \_______\/\________\/ \__\/ \__\/ \__\/ \__\/ \_____\/ 
                                                                                                      
 """);
-}
-else{
-    Console.ForegroundColor = ConsoleColor.Red;
-    Console.WriteLine("""
+    }
+    else
+    {
+        Console.ForegroundColor = ConsoleColor.Red;
+        Console.WriteLine("""
 
 
 
@@ -83,5 +138,7 @@ else{
     \_\/ \_\/ \_____\/ \____/_/     \_______\/\________\/ \__\/ \__\/ \__\/ \__\/ \_____\/ 
                                                                                            
 """);
+    }
+    Console.ReadLine();
+    Console.Clear();
 }
-Console.ReadLine();
