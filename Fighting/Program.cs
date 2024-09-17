@@ -9,21 +9,30 @@ while (enemyHP > 0 && protaganistHP > 0){
     protaganistHP -= eDmg;
 
     Console.ForegroundColor = ConsoleColor.Blue;
-    Console.WriteLine("Blå slog Röd och gjorde " +pDmg + " skada\n");
+    Console.WriteLine("Blue hit Red and did " +pDmg + " damage\n");
     Console.ForegroundColor = ConsoleColor.Red;
-    Console.WriteLine("Röd har nu "+enemyHP+"HP");
-    for(int i = 0; i < 4; i++){
+    Console.WriteLine("Red now has "+enemyHP+"HP");
+    for(int i = 0; i < 3; i++){
         Console.WriteLine("");
     }
     Console.ForegroundColor = ConsoleColor.Red;
-    Console.WriteLine("Röd slog Blå och gjorde " +eDmg + " skada\n");
+    Console.WriteLine("Red hit Blue and did " +eDmg + " damage\n");
     Console.ForegroundColor = ConsoleColor.Blue;
-    Console.WriteLine("Blå har nu "+protaganistHP+"HP");
+    Console.WriteLine("Blue now has "+protaganistHP+"HP\n\n\n");
     Console.ReadLine();
+    Console.Clear();
 }
+
 if(protaganistHP <=0 && enemyHP<=0){
     Console.ForegroundColor = ConsoleColor.DarkMagenta;
     Console.WriteLine("""
+
+
+
+
+
+
+
  ________  _________   ________  ______       ________       ______   ______    ________   __ __ __      
 /_______/\/________/\ /_______/\/_____/\     /_______/\     /_____/\ /_____/\  /_______/\ /_//_//_/\     
 \__.::._\/\__.::.__\/ \__.::._\/\::::_\/_    \::: _  \ \    \:::_ \ \\:::_ \ \ \::: _  \ \\:\\:\\:\ \    
@@ -38,6 +47,13 @@ if(protaganistHP <=0 && enemyHP<=0){
 else if (enemyHP<=0){
     Console.ForegroundColor = ConsoleColor.Blue;
     Console.WriteLine("""
+
+
+
+
+
+
+
   _______   __       __  __   ______       __ __ __    ________  ___   __    ___   __    ______      
 /_______/\ /_/\     /_/\/_/\ /_____/\     /_//_//_/\  /_______/\/__/\ /__/\ /__/\ /__/\ /_____/\     
 \::: _  \ \\:\ \    \:\ \:\ \\::::_\/_    \:\\:\\:\ \ \__.::._\/\::\_\\  \ \\::\_\\  \ \\::::_\/_    
@@ -51,6 +67,13 @@ else if (enemyHP<=0){
 else{
     Console.ForegroundColor = ConsoleColor.Red;
     Console.WriteLine("""
+
+
+
+
+
+
+
  ______    ______   ______       __ __ __    ________  ___   __    ___   __    ______      
 /_____/\  /_____/\ /_____/\     /_//_//_/\  /_______/\/__/\ /__/\ /__/\ /__/\ /_____/\     
 \:::_ \ \ \::::_\/_\:::_ \ \    \:\\:\\:\ \ \__.::._\/\::\_\\  \ \\::\_\\  \ \\::::_\/_    
