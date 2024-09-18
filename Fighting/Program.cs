@@ -4,19 +4,27 @@ int enemyHP;
 int protaganistHP;
 string champName = "";
 
+string enemyName;
+
+while(champName.Length <1 || champName.Length >8){
 Console.ForegroundColor = ConsoleColor.Yellow;
-while(champName.Length <2 || champName.Length >8){
-Console.WriteLine("Write a name for your champion, bettwen 2 & 8 caracters");
+Console.WriteLine("Write a name for your champion, bettwen 1 & 8 caracters");
 Console.ForegroundColor = ConsoleColor.DarkYellow;
  champName = Console.ReadLine();
 }
-string[] opponentName = ["Bob", champName + " Killer", "The Flash", "Dare Devil"];
-Console.WriteLine("Your oppenet in Red is named" opponentName[Random.Shared.Next(opponentName.Length)]);
-Console.WriteLine("Your Champion is Blue. Press Enter to continue\n");
+
+string[] opponentName = ["Bob", champName + " Killer", "Joe Mom", "Dare Devil", "Kaan", "Sherk", "Garmadon", "Adolf H.", "Ronald Mc Donald"];
+Console.ForegroundColor = ConsoleColor.DarkRed;
+enemyName=opponentName[Random.Shared.Next(opponentName.Length)];
+Console.WriteLine($"Your oppenet in Red is named {enemyName}");
+
+Console.ForegroundColor = ConsoleColor.DarkBlue;
+Console.WriteLine($"\n{champName} is in Blue. Press Enter to continue\n");
 Console.ReadLine();
 
 for (int i = 0; i < 9; i++)
 {
+    
     enemyHP = 100;
     protaganistHP = 100;
     while (enemyHP > 0 && protaganistHP > 0)
@@ -31,18 +39,18 @@ for (int i = 0; i < 9; i++)
         {
             int eDmg = Random.Shared.Next(1, 20);
             protaganistHP -= eDmg;
-            Console.WriteLine($"Red hit {champName} and did {eDmg} damage\n");
+            Console.WriteLine($"{enemyName} hit {champName} and did {eDmg} damage\n");
             Console.ForegroundColor = ConsoleColor.Blue;
             Console.WriteLine($"{champName} now has  {protaganistHP}HP");
         }
         else
         {
-            Console.WriteLine($"Red tried to hit {champName} but missed\n");
+            Console.WriteLine($"{enemyName} tried to hit {champName} but missed\n");
             Console.ForegroundColor = ConsoleColor.Blue;
             Console.WriteLine($"{champName} still has {protaganistHP}HP");
         }
                     //split
-        Console.ForegroundColor = ConsoleColor.Magenta;
+        volor();
         Console.WriteLine("""
 
 #######################################
@@ -55,23 +63,33 @@ for (int i = 0; i < 9; i++)
         {
             int pDmg = Random.Shared.Next(1, 20);
             enemyHP -= pDmg;
-            Console.WriteLine($"{champName} hit Red and did {pDmg} damage\n");
+            Console.WriteLine($"{champName} hit {enemyName} and did {pDmg} damage\n");
             Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine("Red now has " + enemyHP + "HP");
+            Console.WriteLine($"{enemyName} now has " + enemyHP + "HP");
         }
         else
         {
-            Console.WriteLine($"{champName} tried to hit Red but missed\n");
+            Console.WriteLine($"{champName} tried to hit {enemyName} but missed\n");
             Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine("Red still has " + enemyHP + "HP\n\n\n");
+            Console.WriteLine($"{enemyName} still has {enemyHP}HP");
         }
+                  //split
+        Console.ForegroundColor = ConsoleColor.Magenta;
+        Console.WriteLine("""
+
+#######################################
+
+""");
 
 
 
         Console.ReadLine();
-        Console.Clear();
     }
     textResult();
+    Console.ForegroundColor = ConsoleColor.DarkRed;
+    enemyName = opponentName[Random.Shared.Next(opponentName.Length)];
+    Console.WriteLine("Your oppenet in Red is named " +enemyName+"\n\n");
+
 }
 void textResult()
 {
@@ -79,8 +97,6 @@ void textResult()
     {
         Console.ForegroundColor = ConsoleColor.DarkMagenta;
         Console.WriteLine("""
-
-
 
 
 
@@ -95,14 +111,14 @@ void textResult()
   \________\/   \__\/   \________\/ \_____\/     \__\/\__\/     \____/_/ \_\/ \_\/ \__\/\__\/ \_______\/ 
                                                                                                          
 
+
+
 """);
     }
     else if (enemyHP <= 0)
     {
         Console.ForegroundColor = ConsoleColor.Blue;
         Console.WriteLine("""
-
-
 
 
 
@@ -116,14 +132,14 @@ void textResult()
    \::(_)  \ \\:\/___/\\:\_\:\ \\:\____/\    \:\\:\\:\ \/__\::\__/\\. \`-\  \ \\. \`-\  \ \ /____\:\ 
     \_______\/ \_____\/ \_____\/ \_____\/     \_______\/\________\/ \__\/ \__\/ \__\/ \__\/ \_____\/ 
                                                                                                      
+
+
 """);
     }
     else
     {
         Console.ForegroundColor = ConsoleColor.Red;
         Console.WriteLine("""
-
-
 
 
 
@@ -137,8 +153,59 @@ void textResult()
    \ \ `\ \ \\:\____/\\:\/.:| |    \:\\:\\:\ \/__\::\__/\\. \`-\  \ \\. \`-\  \ \ /____\:\ 
     \_\/ \_\/ \_____\/ \____/_/     \_______\/\________\/ \__\/ \__\/ \__\/ \__\/ \_____\/ 
                                                                                            
+
+
 """);
     }
     Console.ReadLine();
-    Console.Clear();
+}
+
+//Stupid
+static void volor(){
+    int numCol = Random.Shared.Next(15);
+    if(numCol == 0){
+    Console.ForegroundColor = ConsoleColor.Blue;
+    }
+    else if(numCol == 1){
+    Console.ForegroundColor = ConsoleColor.DarkCyan;
+    }
+    else if(numCol == 2){
+    Console.ForegroundColor = ConsoleColor.Cyan;
+    }
+    else if(numCol == 3){
+    Console.ForegroundColor = ConsoleColor.DarkBlue;
+    }
+    else if(numCol == 4){
+    Console.ForegroundColor = ConsoleColor.DarkGray;
+    }
+    else if(numCol == 5){
+    Console.ForegroundColor = ConsoleColor.DarkGreen;
+    }
+    else if(numCol == 6){
+    Console.ForegroundColor = ConsoleColor.DarkMagenta;
+    }
+    else if(numCol == 7){
+    Console.ForegroundColor = ConsoleColor.DarkRed;
+    }
+    else if(numCol == 8){
+    Console.ForegroundColor = ConsoleColor.DarkYellow;
+    }
+    else if(numCol == 9){
+    Console.ForegroundColor = ConsoleColor.Gray;
+    }
+    else if(numCol == 10){
+    Console.ForegroundColor = ConsoleColor.Green;
+    }
+    else if(numCol == 12){
+    Console.ForegroundColor = ConsoleColor.Magenta;
+    }
+    else if(numCol == 13){
+    Console.ForegroundColor = ConsoleColor.Red;
+    }
+    else if(numCol == 14){
+    Console.ForegroundColor = ConsoleColor.White;
+    }
+    else if(numCol == 15){
+    Console.ForegroundColor = ConsoleColor.Yellow;
+    }
 }
