@@ -1,39 +1,92 @@
 ﻿using System.Security.Cryptography;
 
-int enemyHP;
-int protaganistHP;
+int enemyHP = 0;
+int protaganistHP = 0;
+bool bWin = enemyHP <=0 && protaganistHP !<= 0;
+bool rWin = enemyHP !<=0 && protaganistHP <= 0;
+bool tie = enemyHP <=0 && protaganistHP <= 0;
 string champName = "";
+int coins = 50;
 
 string enemyName;
 
-while(champName.Length <1 || champName.Length >8){
-Console.ForegroundColor = ConsoleColor.Yellow;
-Console.WriteLine("Write a name for your champion, bettwen 1 & 8 caracters");
-Console.ForegroundColor = ConsoleColor.DarkYellow;
- champName = Console.ReadLine();
+while (champName.Length < 1 || champName.Length > 8)
+{
+    Console.ForegroundColor = ConsoleColor.Yellow;
+    Console.WriteLine("Write a name for your champion, bettwen 1 & 8 caracters");
+    Console.ForegroundColor = ConsoleColor.DarkYellow;
+    champName = Console.ReadLine();
 }
 
 string[] opponentName = ["Bob", champName + " Killer", "Joe Mom", "Dare Devil", "Kaan", "Sherk", "Garmadon", "Adolf H.", "Ronald Mc Donald"];
 Console.ForegroundColor = ConsoleColor.DarkRed;
-enemyName=opponentName[Random.Shared.Next(opponentName.Length)];
+enemyName = opponentName[Random.Shared.Next(opponentName.Length)];
 Console.WriteLine($"Your oppenet in Red is named {enemyName}");
 
 Console.ForegroundColor = ConsoleColor.DarkBlue;
-Console.WriteLine($"\n{champName} is in Blue. Press Enter to continue\n");
+Console.WriteLine($"\n{champName} is in Blue. Press Enter to continue\n\n");
 Console.ReadLine();
+
+string[] armourType = ["nothing", "Leather", "Chain", "Copper", "Iron", "Steel", "Knights"];
+int[] typeHP = [0, 20, 40, 50, 70, 90, 120];
+int[] typeCost = [0, 40, 50, 60, 75, 90, 150];
+int currentArmour = 0;
 
 for (int i = 0; i < 9; i++)
 {
-    
+    string awns = "fan";
+    int betAmt = 0;
+    while (awns != "")
+    {
+        bool buyArmour = currentArmour != 6;
+
+        Console.WriteLine($"you have {coins} that you can either bet or use to buy equipment for your champion\n");
+        Console.WriteLine("Write: A to bet");
+        if (buyArmour)
+        {
+            Console.WriteLine($"Write: B to buy {armourType[currentArmour + 1]} Armour for {typeCost[currentArmour + 1]} coins");
+        }
+        Console.WriteLine("Write nothing to begin the fight");
+        awns = Console.ReadLine().ToLower();
+        if (awns == "a")
+        {
+            Console.WriteLine("How much do you want to bet that your champion wins?");
+            awns = Console.ReadLine().ToLower();
+            betAmt = int.Parse(awns);
+            if (betAmt > coins)
+            {
+                Console.WriteLine($"You dont have enough Coins, enter a valid amount\nYou have {coins} coins");
+            }
+            else
+            {
+                Console.WriteLine($"You will get {coins * 2} if your champion wins now\n\n");
+                coins -= betAmt;
+            }
+        }
+        else if (awns == "b" && buyArmour)
+        {
+            if (typeCost[currentArmour + 1] > coins)
+            {
+                Console.WriteLine($"You dont have enough coins, the armour costs{typeCost[currentArmour + 1]} and you only have {coins}");
+            }
+            else
+            {
+                currentArmour++;
+                Console.WriteLine($"The Armour incresses your Chmpions HP with{typeHP[currentArmour]}");
+            }
+
+        }
+    }
+
     enemyHP = 100;
-    protaganistHP = 100;
+    protaganistHP = 100 + typeHP[currentArmour];
     while (enemyHP > 0 && protaganistHP > 0)
     {
         int eHit = Random.Shared.Next(0, 10);
         int pHit = Random.Shared.Next(0, 10);
 
 
-                        //Red Attack
+        //Red Attack
         Console.ForegroundColor = ConsoleColor.Red;
         if (eHit > 4)
         {
@@ -49,7 +102,7 @@ for (int i = 0; i < 9; i++)
             Console.ForegroundColor = ConsoleColor.Blue;
             Console.WriteLine($"{champName} still has {protaganistHP}HP");
         }
-                    //split
+        //split
         volor();
         Console.WriteLine("""
 
@@ -57,7 +110,7 @@ for (int i = 0; i < 9; i++)
 
 """);
 
-                            //Blue attack
+        //Blue attack
         Console.ForegroundColor = ConsoleColor.Blue;
         if (pHit > 4)
         {
@@ -73,7 +126,7 @@ for (int i = 0; i < 9; i++)
             Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine($"{enemyName} still has {enemyHP}HP");
         }
-                  //split
+        //split
         Console.ForegroundColor = ConsoleColor.Magenta;
         Console.WriteLine("""
 
@@ -86,14 +139,18 @@ for (int i = 0; i < 9; i++)
         Console.ReadLine();
     }
     textResult();
+    if(betAmt>0){
+
+    }
+    Console.ReadLine();
     Console.ForegroundColor = ConsoleColor.DarkRed;
     enemyName = opponentName[Random.Shared.Next(opponentName.Length)];
-    Console.WriteLine("Your oppenet in Red is named " +enemyName+"\n\n");
+    Console.WriteLine("Your oppenet in Red is named " + enemyName + "\n\n");
 
 }
 void textResult()
 {
-    if (protaganistHP <= 0 && enemyHP <= 0)
+    if (tie)
     {
         Console.ForegroundColor = ConsoleColor.DarkMagenta;
         Console.WriteLine("""
@@ -115,7 +172,7 @@ void textResult()
 
 """);
     }
-    else if (enemyHP <= 0)
+    else if (bWin)
     {
         Console.ForegroundColor = ConsoleColor.Blue;
         Console.WriteLine("""
@@ -157,55 +214,70 @@ void textResult()
 
 """);
     }
-    Console.ReadLine();
 }
 
 //Stupid
-static void volor(){
+static void volor()
+{
     int numCol = Random.Shared.Next(15);
-    if(numCol == 0){
-    Console.ForegroundColor = ConsoleColor.Blue;
+    if (numCol == 0)
+    {
+        Console.ForegroundColor = ConsoleColor.Blue;
     }
-    else if(numCol == 1){
-    Console.ForegroundColor = ConsoleColor.DarkCyan;
+    else if (numCol == 1)
+    {
+        Console.ForegroundColor = ConsoleColor.DarkCyan;
     }
-    else if(numCol == 2){
-    Console.ForegroundColor = ConsoleColor.Cyan;
+    else if (numCol == 2)
+    {
+        Console.ForegroundColor = ConsoleColor.Cyan;
     }
-    else if(numCol == 3){
-    Console.ForegroundColor = ConsoleColor.DarkBlue;
+    else if (numCol == 3)
+    {
+        Console.ForegroundColor = ConsoleColor.DarkBlue;
     }
-    else if(numCol == 4){
-    Console.ForegroundColor = ConsoleColor.DarkGray;
+    else if (numCol == 4)
+    {
+        Console.ForegroundColor = ConsoleColor.DarkGray;
     }
-    else if(numCol == 5){
-    Console.ForegroundColor = ConsoleColor.DarkGreen;
+    else if (numCol == 5)
+    {
+        Console.ForegroundColor = ConsoleColor.DarkGreen;
     }
-    else if(numCol == 6){
-    Console.ForegroundColor = ConsoleColor.DarkMagenta;
+    else if (numCol == 6)
+    {
+        Console.ForegroundColor = ConsoleColor.DarkMagenta;
     }
-    else if(numCol == 7){
-    Console.ForegroundColor = ConsoleColor.DarkRed;
+    else if (numCol == 7)
+    {
+        Console.ForegroundColor = ConsoleColor.DarkRed;
     }
-    else if(numCol == 8){
-    Console.ForegroundColor = ConsoleColor.DarkYellow;
+    else if (numCol == 8)
+    {
+        Console.ForegroundColor = ConsoleColor.DarkYellow;
     }
-    else if(numCol == 9){
-    Console.ForegroundColor = ConsoleColor.Gray;
+    else if (numCol == 9)
+    {
+        Console.ForegroundColor = ConsoleColor.Gray;
     }
-    else if(numCol == 10){
-    Console.ForegroundColor = ConsoleColor.Green;
+    else if (numCol == 10)
+    {
+        Console.ForegroundColor = ConsoleColor.Green;
     }
-    else if(numCol == 12){
-    Console.ForegroundColor = ConsoleColor.Magenta;
+    else if (numCol == 12)
+    {
+        Console.ForegroundColor = ConsoleColor.Magenta;
     }
-    else if(numCol == 13){
-    Console.ForegroundColor = ConsoleColor.Red;
+    else if (numCol == 13)
+    {
+        Console.ForegroundColor = ConsoleColor.Red;
     }
-    else if(numCol == 14){
-    Console.ForegroundColor = ConsoleColor.White;
+    else if (numCol == 14)
+    {
+        Console.ForegroundColor = ConsoleColor.White;
     }
-    else if(numCol == 15){
-    Console.ForegroundColor = ConsoleColor.Yellow;
+    else if (numCol == 15)
+    {
+        Console.ForegroundColor = ConsoleColor.Yellow;
     }
 }

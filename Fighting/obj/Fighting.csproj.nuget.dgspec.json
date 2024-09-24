@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "c:\\Users\\jack.gissle\\Desktop\\Prog !\\Fighting\\Fighting\\Fighting.csproj": {}
+    "C:\\Users\\jack.gissle\\Desktop\\Prog !\\Fighting\\Fighting\\Fighting.csproj": {}
   },
   "projects": {
-    "c:\\Users\\jack.gissle\\Desktop\\Prog !\\Fighting\\Fighting\\Fighting.csproj": {
+    "C:\\Users\\jack.gissle\\Desktop\\Prog !\\Fighting\\Fighting\\Fighting.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "c:\\Users\\jack.gissle\\Desktop\\Prog !\\Fighting\\Fighting\\Fighting.csproj",
+        "projectUniqueName": "C:\\Users\\jack.gissle\\Desktop\\Prog !\\Fighting\\Fighting\\Fighting.csproj",
         "projectName": "Fighting",
-        "projectPath": "c:\\Users\\jack.gissle\\Desktop\\Prog !\\Fighting\\Fighting\\Fighting.csproj",
+        "projectPath": "C:\\Users\\jack.gissle\\Desktop\\Prog !\\Fighting\\Fighting\\Fighting.csproj",
         "packagesPath": "C:\\Users\\jack.gissle\\.nuget\\packages\\",
-        "outputPath": "c:\\Users\\jack.gissle\\Desktop\\Prog !\\Fighting\\Fighting\\obj\\",
+        "outputPath": "C:\\Users\\jack.gissle\\Desktop\\Prog !\\Fighting\\Fighting\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\jack.gissle\\AppData\\Roaming\\NuGet\\NuGet.Config"
