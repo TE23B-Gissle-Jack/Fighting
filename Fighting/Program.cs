@@ -1,64 +1,84 @@
-﻿using System.Security.Cryptography;
+﻿using System.Drawing;
+using System.Security.Cryptography;
 
 int enemyHP = 0;
 int protaganistHP = 0;
-bool bWin = enemyHP <=0 && protaganistHP !<= 0;
-bool rWin = enemyHP !<=0 && protaganistHP <= 0;
-bool tie = enemyHP <=0 && protaganistHP <= 0;
+
+ConsoleColor[] color = (ConsoleColor[]) ConsoleColor.GetValues(typeof(ConsoleColor));
+//1 = blue; 12 = red
+
+bool bWin = enemyHP <= 0 && protaganistHP > 0;
+bool rWin = enemyHP > 0 && protaganistHP <= 0;
+bool tie = enemyHP <= 0 && protaganistHP <= 0;
+
 string champName = "";
 int coins = 50;
 
 string enemyName;
 
-while (champName.Length < 1 || champName.Length > 8)
-{
-    Console.ForegroundColor = ConsoleColor.Yellow;
-    Console.WriteLine("Write a name for your champion, bettwen 1 & 8 caracters");
-    Console.ForegroundColor = ConsoleColor.DarkYellow;
-    champName = Console.ReadLine();
-}
-
 string[] opponentName = ["Bob", champName + " Killer", "Joe Mom", "Dare Devil", "Kaan", "Sherk", "Garmadon", "Adolf H.", "Ronald Mc Donald"];
-Console.ForegroundColor = ConsoleColor.DarkRed;
-enemyName = opponentName[Random.Shared.Next(opponentName.Length)];
-Console.WriteLine($"Your oppenet in Red is named {enemyName}");
 
-Console.ForegroundColor = ConsoleColor.DarkBlue;
-Console.WriteLine($"\n{champName} is in Blue. Press Enter to continue\n\n");
-Console.ReadLine();
 
 string[] armourType = ["nothing", "Leather", "Chain", "Copper", "Iron", "Steel", "Knights"];
 int[] typeHP = [0, 20, 40, 50, 70, 90, 120];
 int[] typeCost = [0, 40, 50, 60, 75, 90, 150];
 int currentArmour = 0;
 
+
+
 for (int i = 0; i < 9; i++)
 {
-    string awns = "fan";
+    while (champName.Length < 1 || champName.Length > 8)
+    {
+    Console.ForegroundColor = ConsoleColor.Yellow;
+    Console.WriteLine("Write a name for your champion, bettwen 1 & 8 caracters");
+    Console.ForegroundColor = ConsoleColor.Cyan;
+    champName = Console.ReadLine();
+
+    Console.ForegroundColor = ConsoleColor.DarkBlue;
+    Console.WriteLine($"\n{champName} is in Blue.");
+    }
+    string[] names =[champName, opponentName[Random.Shared.Next(opponentName.Length)]];
+    Console.ForegroundColor = ConsoleColor.DarkRed;
+    //enemyName = opponentName[Random.Shared.Next(opponentName.Length)];
+        Console.WriteLine($"Your oppenet in Red is named {names[1]}. Press Enter to continue\n\n");
+
+    Console.ReadLine();
+
+    string awns = "temp";
     int betAmt = 0;
     while (awns != "")
     {
         bool buyArmour = currentArmour != 6;
 
-        Console.WriteLine($"you have {coins} that you can either bet or use to buy equipment for your champion\n");
+        Console.ForegroundColor = ConsoleColor.DarkYellow;
+        Console.WriteLine($"you have {coins} coins that you can either bet or use to buy equipment for your champion\n");
+        Console.ForegroundColor = ConsoleColor.Yellow;
         Console.WriteLine("Write: A to bet");
         if (buyArmour)
         {
             Console.WriteLine($"Write: B to buy {armourType[currentArmour + 1]} Armour for {typeCost[currentArmour + 1]} coins");
         }
         Console.WriteLine("Write nothing to begin the fight");
+        Console.ForegroundColor = ConsoleColor.Cyan;
         awns = Console.ReadLine().ToLower();
+
+        Console.ForegroundColor = ConsoleColor.Yellow;
         if (awns == "a")
         {
             Console.WriteLine("How much do you want to bet that your champion wins?");
+            Console.ForegroundColor = ConsoleColor.Cyan;
             awns = Console.ReadLine().ToLower();
             betAmt = int.Parse(awns);
             if (betAmt > coins)
             {
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine($"You dont have enough Coins, enter a valid amount\nYou have {coins} coins");
+                betAmt = 0;
             }
             else
             {
+                Console.ForegroundColor = ConsoleColor.DarkYellow;
                 Console.WriteLine($"You will get {coins * 2} if your champion wins now\n\n");
                 coins -= betAmt;
             }
@@ -67,12 +87,14 @@ for (int i = 0; i < 9; i++)
         {
             if (typeCost[currentArmour + 1] > coins)
             {
-                Console.WriteLine($"You dont have enough coins, the armour costs{typeCost[currentArmour + 1]} and you only have {coins}");
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine($"You dont have enough coins, the armour costs {typeCost[currentArmour + 1]} and you only have {coins}");
             }
             else
             {
                 currentArmour++;
-                Console.WriteLine($"The Armour incresses your Chmpions HP with{typeHP[currentArmour]}");
+                Console.WriteLine($"The Armour incresses your Chmpions HP with {typeHP[currentArmour]}\n");
+                coins -= typeCost[currentArmour];
             }
 
         }
@@ -80,6 +102,7 @@ for (int i = 0; i < 9; i++)
 
     enemyHP = 100;
     protaganistHP = 100 + typeHP[currentArmour];
+
     while (enemyHP > 0 && protaganistHP > 0)
     {
         int eHit = Random.Shared.Next(0, 10);
@@ -92,13 +115,13 @@ for (int i = 0; i < 9; i++)
         {
             int eDmg = Random.Shared.Next(1, 20);
             protaganistHP -= eDmg;
-            Console.WriteLine($"{enemyName} hit {champName} and did {eDmg} damage\n");
+            Console.WriteLine($"{names[1]} hit {champName} and did {eDmg} damage\n");
             Console.ForegroundColor = ConsoleColor.Blue;
             Console.WriteLine($"{champName} now has  {protaganistHP}HP");
         }
         else
         {
-            Console.WriteLine($"{enemyName} tried to hit {champName} but missed\n");
+            Console.WriteLine($"{names[1]} tried to hit {champName} but missed\n");
             Console.ForegroundColor = ConsoleColor.Blue;
             Console.WriteLine($"{champName} still has {protaganistHP}HP");
         }
@@ -110,21 +133,21 @@ for (int i = 0; i < 9; i++)
 
 """);
 
-        //Blue attack
+        //Blue attack               stupid repetision
         Console.ForegroundColor = ConsoleColor.Blue;
         if (pHit > 4)
         {
             int pDmg = Random.Shared.Next(1, 20);
             enemyHP -= pDmg;
-            Console.WriteLine($"{champName} hit {enemyName} and did {pDmg} damage\n");
+            Console.WriteLine($"{champName} hit {names[1]} and did {pDmg} damage\n");
             Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine($"{enemyName} now has " + enemyHP + "HP");
+            Console.WriteLine($"{names[1]} now has " + enemyHP + "HP");
         }
         else
         {
-            Console.WriteLine($"{champName} tried to hit {enemyName} but missed\n");
+            Console.WriteLine($"{champName} tried to hit {names[1]} but missed\n");
             Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine($"{enemyName} still has {enemyHP}HP");
+            Console.WriteLine($"{names[1]} still has {enemyHP}HP");
         }
         //split
         Console.ForegroundColor = ConsoleColor.Magenta;
@@ -138,16 +161,32 @@ for (int i = 0; i < 9; i++)
 
         Console.ReadLine();
     }
+
+    tie = enemyHP <= 0 && protaganistHP <= 0;
+    bWin = enemyHP <= 0 && protaganistHP > 0;
+
     textResult();
     if(betAmt>0){
-
+        Console.ForegroundColor = ConsoleColor.DarkYellow;
+        if(tie){
+            Console.WriteLine("Becuse of the tie you get your money back");
+            coins = betAmt;
+        }else if(bWin){
+            Console.WriteLine($"Congratulations to the wicrory! Here is the {betAmt*2} coins payout from your bet");
+            coins = betAmt*2;
+        }
+        betAmt = 0;
     }
     Console.ReadLine();
-    Console.ForegroundColor = ConsoleColor.DarkRed;
+
+    /*Console.ForegroundColor = ConsoleColor.DarkRed;
     enemyName = opponentName[Random.Shared.Next(opponentName.Length)];
-    Console.WriteLine("Your oppenet in Red is named " + enemyName + "\n\n");
+    Console.WriteLine("Your oppenet in Red is named " + enemyName + "\n\n");*/
 
 }
+
+
+
 void textResult()
 {
     if (tie)
