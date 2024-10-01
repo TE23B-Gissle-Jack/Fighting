@@ -1,15 +1,21 @@
 ﻿using System.Drawing;
 using System.Security.Cryptography;
 
-int enemyHP = 0;
-int protaganistHP = 0;
+//int enemyHP = 0;
+//int protaganistHP = 0;
+
+int[] hp = new int[2];
 
 ConsoleColor[] color = (ConsoleColor[]) ConsoleColor.GetValues(typeof(ConsoleColor));
 //1 = blue; 12 = red
 
-bool bWin = enemyHP <= 0 && protaganistHP > 0;
-bool rWin = enemyHP > 0 && protaganistHP <= 0;
-bool tie = enemyHP <= 0 && protaganistHP <= 0;
+// bool bWin = enemyHP <= 0 && protaganistHP > 0;
+// bool rWin = enemyHP > 0 && protaganistHP <= 0;
+// bool tie = enemyHP <= 0 && protaganistHP <= 0;
+
+bool bWin;
+bool rWin;
+bool tie;
 
 string champName = "";
 int coins = 50;
@@ -39,12 +45,15 @@ for (int i = 0; i < 9; i++)
     Console.WriteLine($"\n{champName} is in Blue.");
     }
     string[] names =[champName, opponentName[Random.Shared.Next(opponentName.Length)]];
+
     Console.ForegroundColor = ConsoleColor.DarkRed;
     //enemyName = opponentName[Random.Shared.Next(opponentName.Length)];
         Console.WriteLine($"Your oppenet in Red is named {names[1]}. Press Enter to continue\n\n");
 
     Console.ReadLine();
 
+
+// Buying things and betting
     string awns = "temp";
     int betAmt = 0;
     while (awns != "")
@@ -79,7 +88,7 @@ for (int i = 0; i < 9; i++)
             else
             {
                 Console.ForegroundColor = ConsoleColor.DarkYellow;
-                Console.WriteLine($"You will get {coins * 2} if your champion wins now\n\n");
+                Console.WriteLine($"You will get {coins * 2} coins if your champion wins\n\n");
                 coins -= betAmt;
             }
         }
@@ -100,55 +109,66 @@ for (int i = 0; i < 9; i++)
         }
     }
 
-    enemyHP = 100;
-    protaganistHP = 100 + typeHP[currentArmour];
 
-    while (enemyHP > 0 && protaganistHP > 0)
+
+    //enemyHP = 100;
+    //protaganistHP = 100 + typeHP[currentArmour];
+    hp = [100, 100 + typeHP[currentArmour]];
+
+    while (hp[0] > 0 && hp[1] > 0)
     {
-        int eHit = Random.Shared.Next(0, 10);
-        int pHit = Random.Shared.Next(0, 10);
-
-
         //Red Attack
-        Console.ForegroundColor = ConsoleColor.Red;
-        if (eHit > 4)
+        for(i = 0; i < 2;)
         {
-            int eDmg = Random.Shared.Next(1, 20);
-            protaganistHP -= eDmg;
-            Console.WriteLine($"{names[1]} hit {champName} and did {eDmg} damage\n");
+        int Hit = Random.Shared.Next(0, 10);
+        int other = 1;
+        if(i == 1){
+            other = 0;
+        }
+
+        if (Hit > 4)
+        {
+            int dmg = Random.Shared.Next(1, 20);
+            hp[i] -= dmg;
+
+            Console.ForegroundColor = color[-11*i+12];
+            Console.WriteLine($"{names[i]} hit {names[other]} and did {dmg} damage\n");
             Console.ForegroundColor = ConsoleColor.Blue;
-            Console.WriteLine($"{champName} now has  {protaganistHP}HP");
+            Console.WriteLine($"{names[other]} now has  {hp[other]}HP");
         }
         else
         {
-            Console.WriteLine($"{names[1]} tried to hit {champName} but missed\n");
+            Console.ForegroundColor = color[-11*i+12];
+            Console.WriteLine($"{names[1]} tried to hit {names[other]} but missed\n");
             Console.ForegroundColor = ConsoleColor.Blue;
-            Console.WriteLine($"{champName} still has {protaganistHP}HP");
+            Console.WriteLine($"{names[other]} still has {hp[other]}HP\n");
         }
+        i++;
+    }
         //split
-        volor();
-        Console.WriteLine("""
+//         volor();
+//         Console.WriteLine("""
 
-#######################################
+// #######################################
 
-""");
+// """);
 
-        //Blue attack               stupid repetision
-        Console.ForegroundColor = ConsoleColor.Blue;
-        if (pHit > 4)
-        {
-            int pDmg = Random.Shared.Next(1, 20);
-            enemyHP -= pDmg;
-            Console.WriteLine($"{champName} hit {names[1]} and did {pDmg} damage\n");
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine($"{names[1]} now has " + enemyHP + "HP");
-        }
-        else
-        {
-            Console.WriteLine($"{champName} tried to hit {names[1]} but missed\n");
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine($"{names[1]} still has {enemyHP}HP");
-        }
+//         //Blue attack               stupid repetision
+//         Console.ForegroundColor = ConsoleColor.Blue;
+//         if (pHit > 4)
+//         {
+//             int pDmg = Random.Shared.Next(1, 20);
+//             enemyHP -= pDmg;
+//             Console.WriteLine($"{champName} hit {names[1]} and did {pDmg} damage\n");
+//             Console.ForegroundColor = ConsoleColor.Red;
+//             Console.WriteLine($"{names[1]} now has " + enemyHP + "HP");
+//         }
+//         else
+//         {
+//             Console.WriteLine($"{champName} tried to hit {names[1]} but missed\n");
+//             Console.ForegroundColor = ConsoleColor.Red;
+//             Console.WriteLine($"{names[1]} still has {enemyHP}HP");
+//         }
         //split
         Console.ForegroundColor = ConsoleColor.Magenta;
         Console.WriteLine("""
@@ -162,8 +182,8 @@ for (int i = 0; i < 9; i++)
         Console.ReadLine();
     }
 
-    tie = enemyHP <= 0 && protaganistHP <= 0;
-    bWin = enemyHP <= 0 && protaganistHP > 0;
+    tie = hp[0] <= 0 && hp[1] <= 0;
+    bWin = hp[0] <= 0 && hp[1] > 0;
 
     textResult();
     if(betAmt>0){
