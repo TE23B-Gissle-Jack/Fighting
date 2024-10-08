@@ -6,22 +6,18 @@ using System.Security.Cryptography;
 
 int[] hp = new int[2];
 
-ConsoleColor[] color = (ConsoleColor[]) ConsoleColor.GetValues(typeof(ConsoleColor));
+ConsoleColor[] color = (ConsoleColor[])ConsoleColor.GetValues(typeof(ConsoleColor));
 //1 = blue; 12 = red
 
-// bool bWin = enemyHP <= 0 && protaganistHP > 0;
-// bool rWin = enemyHP > 0 && protaganistHP <= 0;
-// bool tie = enemyHP <= 0 && protaganistHP <= 0;
-
+//defined later
 bool bWin;
-bool rWin;
 bool tie;
 
-string champName = "";
+
 int coins = 50;
+int totalBetAmt = 0;
 
-string enemyName;
-
+string champName = "";
 string[] opponentName = ["Bob", champName + " Killer", "Joe Mom", "Dare Devil", "Kaan", "Sherk", "Garmadon", "Adolf H.", "Ronald Mc Donald"];
 
 
@@ -34,28 +30,29 @@ int currentArmour = 0;
 
 for (int i = 0; i < 9; i++)
 {
+    //set up
     while (champName.Length < 1 || champName.Length > 8)
     {
-    Console.ForegroundColor = ConsoleColor.Yellow;
-    Console.WriteLine("Write a name for your champion, bettwen 1 & 8 caracters");
-    Console.ForegroundColor = ConsoleColor.Cyan;
-    champName = Console.ReadLine();
+        Console.ForegroundColor = ConsoleColor.Yellow;
+        Console.WriteLine("Write a name for your champion, bettwen 1 & 8 caracters");
+        Console.ForegroundColor = ConsoleColor.Cyan;
+        champName = Console.ReadLine();
 
-    Console.ForegroundColor = ConsoleColor.DarkBlue;
-    Console.WriteLine($"\n{champName} is in Blue.");
+        Console.ForegroundColor = ConsoleColor.DarkBlue;
+        Console.WriteLine($"\n{champName} is in Blue.");
     }
-    string[] names =[champName, opponentName[Random.Shared.Next(opponentName.Length)]];
+    string[] names = [champName, opponentName[Random.Shared.Next(opponentName.Length)]];
 
     Console.ForegroundColor = ConsoleColor.DarkRed;
-    //enemyName = opponentName[Random.Shared.Next(opponentName.Length)];
-        Console.WriteLine($"Your oppenet in Red is named {names[1]}. Press Enter to continue\n\n");
+
+    Console.WriteLine($"Your oppenet in Red is named {names[1]}. Press Enter to continue\n\n");
 
     Console.ReadLine();
 
 
-// Buying things and betting
+    // Buying things and betting
+    //=================================================================================================
     string awns = "temp";
-    int betAmt = 0;
     while (awns != "")
     {
         bool buyArmour = currentArmour != 6;
@@ -75,22 +72,29 @@ for (int i = 0; i < 9; i++)
         Console.ForegroundColor = ConsoleColor.Yellow;
         if (awns == "a")
         {
+            int betAmt = 0;
             Console.WriteLine("How much do you want to bet that your champion wins?");
+
             Console.ForegroundColor = ConsoleColor.Cyan;
             awns = Console.ReadLine().ToLower();
-            betAmt = int.Parse(awns);
+            int.TryParse(awns, out betAmt);
             if (betAmt > coins)
             {
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine($"You dont have enough Coins, enter a valid amount\nYou have {coins} coins");
+
+                //since betAmt = int.Parse(awns);
                 betAmt = 0;
             }
             else
             {
                 Console.ForegroundColor = ConsoleColor.DarkYellow;
-                Console.WriteLine($"You will get {coins * 2} coins if your champion wins\n\n");
+                totalBetAmt += betAmt;
+                Console.WriteLine($"You will get {totalBetAmt * 2} coins if your champion wins\n\n");
                 coins -= betAmt;
+
             }
+            awns = "temp";
         }
         else if (awns == "b" && buyArmour)
         {
@@ -108,70 +112,60 @@ for (int i = 0; i < 9; i++)
 
         }
     }
+    //=============================================================================================
 
+    hp = [100 + typeHP[currentArmour], 100];
 
-
-    //enemyHP = 100;
-    //protaganistHP = 100 + typeHP[currentArmour];
-    hp = [100, 100 + typeHP[currentArmour]];
-
+    //main loop
     while (hp[0] > 0 && hp[1] > 0)
     {
         //Red Attack
-        for(i = 0; i < 2;)
+        for (i = 0; i < 2;)
         {
-        int Hit = Random.Shared.Next(0, 10);
-        int other = 1;
-        if(i == 1){
-            other = 0;
+            int hit = Random.Shared.Next(0, 10);
+            int other = 1;
+            if (i == 1)
+            {
+                other = 0;
+                //split
+                Console.ForegroundColor = color[Random.Shared.Next(16)];
+                Console.WriteLine("""
+
+ #######################################
+
+ """);
+            }
+
+            if (hit > 4)
+            {
+                int dmg = Random.Shared.Next(1, 20);
+                hp[other] -= dmg;
+
+                Console.ForegroundColor = color[11 * i + 1]; // 12 if i = 1, 1 if i = 0 // Red = 12, Blue = 1;
+                Console.WriteLine($"{names[i]} hit {names[other]} and did {dmg} damage\n");
+                Console.ForegroundColor = color[-11 * i + 12]; // 1 if i = 1, 12 if i = 0
+                Console.WriteLine($"{names[other]} now has  {hp[other]}HP");
+            }
+            else
+            {
+                Console.ForegroundColor = color[11 * i + 1];
+                Console.WriteLine($"{names[i]} tried to hit {names[other]} but missed\n");
+                Console.ForegroundColor = color[-11 * i + 12];
+                Console.WriteLine($"{names[other]} still has {hp[other]}HP");
+            }
+            Console.ReadLine();
+
+
+            i++;
         }
 
-        if (Hit > 4)
-        {
-            int dmg = Random.Shared.Next(1, 20);
-            hp[i] -= dmg;
-
-            Console.ForegroundColor = color[-11*i+12];
-            Console.WriteLine($"{names[i]} hit {names[other]} and did {dmg} damage\n");
-            Console.ForegroundColor = ConsoleColor.Blue;
-            Console.WriteLine($"{names[other]} now has  {hp[other]}HP");
-        }
-        else
-        {
-            Console.ForegroundColor = color[-11*i+12];
-            Console.WriteLine($"{names[1]} tried to hit {names[other]} but missed\n");
-            Console.ForegroundColor = ConsoleColor.Blue;
-            Console.WriteLine($"{names[other]} still has {hp[other]}HP\n");
-        }
-        i++;
-    }
         //split
-//         volor();
-//         Console.WriteLine("""
-
-// #######################################
-
-// """);
-
-//         //Blue attack               stupid repetision
-//         Console.ForegroundColor = ConsoleColor.Blue;
-//         if (pHit > 4)
-//         {
-//             int pDmg = Random.Shared.Next(1, 20);
-//             enemyHP -= pDmg;
-//             Console.WriteLine($"{champName} hit {names[1]} and did {pDmg} damage\n");
-//             Console.ForegroundColor = ConsoleColor.Red;
-//             Console.WriteLine($"{names[1]} now has " + enemyHP + "HP");
-//         }
-//         else
-//         {
-//             Console.WriteLine($"{champName} tried to hit {names[1]} but missed\n");
-//             Console.ForegroundColor = ConsoleColor.Red;
-//             Console.WriteLine($"{names[1]} still has {enemyHP}HP");
-//         }
-        //split
-        Console.ForegroundColor = ConsoleColor.Magenta;
+        Console.ForegroundColor = ConsoleColor.White;
         Console.WriteLine("""
+
+#######################################
+
+     ~~~~~~~~~NEW Round~~~~~~~~
 
 #######################################
 
@@ -183,27 +177,27 @@ for (int i = 0; i < 9; i++)
     }
 
     tie = hp[0] <= 0 && hp[1] <= 0;
-    bWin = hp[0] <= 0 && hp[1] > 0;
+    bWin = hp[1] <= 0 && hp[0] > 0;
 
     textResult();
-    if(betAmt>0){
+    if (totalBetAmt > 0)
+    {
         Console.ForegroundColor = ConsoleColor.DarkYellow;
-        if(tie){
+        if (tie)
+        {
             Console.WriteLine("Becuse of the tie you get your money back");
-            coins = betAmt;
-        }else if(bWin){
-            Console.WriteLine($"Congratulations to the wicrory! Here is the {betAmt*2} coins payout from your bet");
-            coins = betAmt*2;
+            coins = totalBetAmt;
         }
-        betAmt = 0;
+        else if (bWin)
+        {
+            Console.WriteLine($"Congratulations to the wicrory! Here is the {totalBetAmt * 2} coins payout from your bet");
+            coins = totalBetAmt * 2;
+        }
+        totalBetAmt = 0;
     }
     Console.ReadLine();
-
-    /*Console.ForegroundColor = ConsoleColor.DarkRed;
-    enemyName = opponentName[Random.Shared.Next(opponentName.Length)];
-    Console.WriteLine("Your oppenet in Red is named " + enemyName + "\n\n");*/
-
 }
+
 
 
 
@@ -275,68 +269,4 @@ void textResult()
     }
 }
 
-//Stupid
-static void volor()
-{
-    int numCol = Random.Shared.Next(15);
-    if (numCol == 0)
-    {
-        Console.ForegroundColor = ConsoleColor.Blue;
-    }
-    else if (numCol == 1)
-    {
-        Console.ForegroundColor = ConsoleColor.DarkCyan;
-    }
-    else if (numCol == 2)
-    {
-        Console.ForegroundColor = ConsoleColor.Cyan;
-    }
-    else if (numCol == 3)
-    {
-        Console.ForegroundColor = ConsoleColor.DarkBlue;
-    }
-    else if (numCol == 4)
-    {
-        Console.ForegroundColor = ConsoleColor.DarkGray;
-    }
-    else if (numCol == 5)
-    {
-        Console.ForegroundColor = ConsoleColor.DarkGreen;
-    }
-    else if (numCol == 6)
-    {
-        Console.ForegroundColor = ConsoleColor.DarkMagenta;
-    }
-    else if (numCol == 7)
-    {
-        Console.ForegroundColor = ConsoleColor.DarkRed;
-    }
-    else if (numCol == 8)
-    {
-        Console.ForegroundColor = ConsoleColor.DarkYellow;
-    }
-    else if (numCol == 9)
-    {
-        Console.ForegroundColor = ConsoleColor.Gray;
-    }
-    else if (numCol == 10)
-    {
-        Console.ForegroundColor = ConsoleColor.Green;
-    }
-    else if (numCol == 12)
-    {
-        Console.ForegroundColor = ConsoleColor.Magenta;
-    }
-    else if (numCol == 13)
-    {
-        Console.ForegroundColor = ConsoleColor.Red;
-    }
-    else if (numCol == 14)
-    {
-        Console.ForegroundColor = ConsoleColor.White;
-    }
-    else if (numCol == 15)
-    {
-        Console.ForegroundColor = ConsoleColor.Yellow;
-    }
-}
+
