@@ -1,10 +1,7 @@
 ﻿using System.Drawing;
 using System.Security.Cryptography;
 
-//int enemyHP = 0;
-//int protaganistHP = 0;
 
-int[] hp = new int[2];
 
 ConsoleColor[] color = (ConsoleColor[])ConsoleColor.GetValues(typeof(ConsoleColor));
 //1 = blue; 12 = red
@@ -13,21 +10,25 @@ ConsoleColor[] color = (ConsoleColor[])ConsoleColor.GetValues(typeof(ConsoleColo
 bool bWin;
 bool tie;
 
+//for later
+int[] hp = new int[2];
 
 int coins = 50;
 int totalBetAmt = 0;
-
-string champName = "";
-string[] opponentName = ["Bob", champName + " Killer", "Joe Mom", "Dare Devil", "Kaan", "Sherk", "Garmadon", "Adolf H.", "Ronald Mc Donald"];
+                            //dont think this works         champName + " Killer"
+string champName = "";  //          v
+string[] opponentName = ["Bob", "temp", "Joe Mom", "Dare Devil", "Kaan", "Sherk", "Garmadon", "Adolf H.", "Ronald Mc Donald"];
 
 
 string[] armourType = ["nothing", "Leather", "Chain", "Copper", "Iron", "Steel", "Knights"];
-int[] typeHP = [0, 20, 40, 50, 70, 90, 120];
+int[] typeHP  =  [0, 20, 40, 50, 70, 90, 120];
 int[] typeCost = [0, 40, 50, 60, 75, 90, 150];
 int currentArmour = 0;
 
+int hit;
+int dmg;
 
-
+//9 fights
 for (int i = 0; i < 9; i++)
 {
     //set up
@@ -41,6 +42,8 @@ for (int i = 0; i < 9; i++)
         Console.ForegroundColor = ConsoleColor.DarkBlue;
         Console.WriteLine($"\n{champName} is in Blue.");
     }
+    //could just deffine whole thing here
+    opponentName[1] = champName + " Killer";
     string[] names = [champName, opponentName[Random.Shared.Next(opponentName.Length)]];
 
     Console.ForegroundColor = ConsoleColor.DarkRed;
@@ -114,31 +117,27 @@ for (int i = 0; i < 9; i++)
     }
     //=============================================================================================
 
-    hp = [100 + typeHP[currentArmour], 100];
+    hp = [50 + typeHP[currentArmour], 50];
 
-    //main loop
+    //attack loop
     while (hp[0] > 0 && hp[1] > 0)
     {
-        //Red Attack
+        //Attack
         for (i = 0; i < 2;)
         {
-            int hit = Random.Shared.Next(0, 10);
+            fightStyle(i);
             int other = 1;
             if (i == 1)
             {
                 other = 0;
+
                 //split
                 Console.ForegroundColor = color[Random.Shared.Next(16)];
-                Console.WriteLine("""
-
- #######################################
-
- """);
+                Console.WriteLine("\n#######################################\n");
             }
 
-            if (hit > 4)
+            if (hit == 1)
             {
-                int dmg = Random.Shared.Next(1, 20);
                 hp[other] -= dmg;
 
                 Console.ForegroundColor = color[11 * i + 1]; // 12 if i = 1, 1 if i = 0 // Red = 12, Blue = 1;
@@ -173,7 +172,7 @@ for (int i = 0; i < 9; i++)
 
 
 
-        Console.ReadLine();
+        // Console.ReadLine();
     }
 
     tie = hp[0] <= 0 && hp[1] <= 0;
@@ -199,7 +198,55 @@ for (int i = 0; i < 9; i++)
 }
 
 
+void fightStyle(int who)
+{
 
+    int[] choiceDmg = [0];
+    int choiceHit = 2;
+    string awns = "";
+    if (who == 0)
+    {
+        while (awns != "a" && awns != "b")
+        {
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
+            Console.WriteLine("What do you want your champion to do?");
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine("a) hit the enemy in the head. 10-20 dmg 20%");
+            Console.WriteLine("b) hit the enemy in the stomach. 1-10 dmg 50%");
+            awns = Console.ReadLine().ToLower();
+            if (awns == "a")
+            {
+                choiceDmg = [10, 21];
+                choiceHit = 5;
+            }
+            else if (awns == "b")
+            {
+                choiceDmg = [1, 11];
+                choiceHit = 2;
+            }
+            else
+            {
+                Console.WriteLine("Whrite a or b to chose");
+            }
+        }
+    }
+    else
+    {
+        if (Random.Shared.Next(2) == 1)
+        {
+            choiceDmg = [10, 21];
+            choiceHit = 6;
+        }
+        else
+        {
+            choiceDmg = [1, 11];
+            choiceHit = 2;
+        }
+
+    }
+    hit = Random.Shared.Next(0, choiceHit);
+    dmg = Random.Shared.Next(choiceDmg[0], choiceDmg[1]);
+}
 
 void textResult()
 {
